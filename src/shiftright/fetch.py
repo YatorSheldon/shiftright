@@ -108,6 +108,11 @@ def parse_legislation(html: str, doc_url: str) -> list[Section]:
             # The Register's own contents links point at the inner <a id="_Toc...">.
             inner = p.find("a", id=True)
             anchor = inner.get("id") if inner else p.get("id")
+            # Schedules restart their numbering (Schedule 1 has its own clause 87),
+            # so label them "Sch 1 cl 87" to keep them distinct from "s 87".
+            schedule = next((re.match(r"Schedule\s+(\w+)", v) for v in context.values() if v.startswith("Schedule")), None)
+            if schedule and number:
+                number = f"Sch {schedule.group(1)} cl {number}"
             current = Section(
                 number=number,
                 heading=heading,

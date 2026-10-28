@@ -47,7 +47,8 @@ def _split_sentences(text: str) -> list[str]:
 def chunk_page(page: Page, target_words: int = TARGET_WORDS, overlap_words: int = OVERLAP_WORDS) -> list[Chunk]:
     chunks: list[Chunk] = []
     for section in page.sections:
-        heading = f"{page.cite} {section.label}".strip()
+        prefix = "" if section.number.startswith("Sch ") else f"{page.cite} "
+        heading = f"{prefix}{section.label}".strip()
         sentences = _split_sentences(section.text)
         window: list[str] = []
         count = 0

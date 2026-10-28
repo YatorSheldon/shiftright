@@ -17,14 +17,17 @@ HTML = """
 <p class="ActHead5"><a id="_Toc5"><span class="CharSectno">20A</span><span>&#xa0; </span><span>Entitlement to personal leave</span></a></p>
 <p class="subsection"><span>An employee is entitled to personal leave.</span></p>
 <p class="ActHead5"><a id="_Toc6"><span class="CharSectno">21</span><span>&#xa0; </span><span>Empty section is dropped</span></a></p>
+<p class="ActHead1"><a id="_Toc7"><span>Schedule&#xa0;1</span><span>—</span><span>Transitional provisions</span></a></p>
+<p class="ActHead5"><a id="_Toc8"><span class="CharSectno">20</span><span>&#xa0; </span><span>Transitional rule</span></a></p>
+<p class="subsection"><span>An invented transitional clause.</span></p>
 </body></html>
 """
 
 
 def test_parse_legislation_sections_numbers_context_and_anchors():
     sections = parse_legislation(HTML, DOC_URL)
-    assert [s.number for s in sections] == ["20", "20A"]
-    s20, s20a = sections
+    assert [s.number for s in sections] == ["20", "20A", "Sch 1 cl 20"]  # schedule numbering kept distinct
+    s20, s20a, _ = sections
     assert s20.heading == "Entitlement to annual leave"
     assert s20.context == "Part 2-2 — Standards > Division 6 — Annual leave"  # non-breaking hyphen normalised
     assert "entitled to paid annual leave" in s20.text and "accrued progressively" in s20.text
