@@ -4,6 +4,8 @@ beautifulsoup4>=4.12
 fastapi>=0.110
 uvicorn>=0.29
 gradio>=4.0
+# optional: hybrid search embeddings
+# fastembed>=0.4
 # optional providers
 # anthropic>=0.40
 # openai>=1.40

@@ -6,7 +6,8 @@
 - ``extractive`` no model at all: returns the most relevant source sentences.
                  Used in tests, CI and demos where no model is available.
 
-Choose with SHIFTRIGHT_LLM, and the model with SHIFTRIGHT_MODEL.
+Choose with SHIFTRIGHT_LLM, and the model with SHIFTRIGHT_MODEL. Hybrid search embeddings
+come from fastembed (default) or Ollama, chosen with SHIFTRIGHT_EMBEDDER.
 """
 
 from __future__ import annotations
@@ -111,6 +112,28 @@ def get_llm(kind: str | None = None) -> LLM:
     if kind == "extractive":
         return ExtractiveLLM()
     raise ValueError(f"Unknown SHIFTRIGHT_LLM '{kind}'. Use ollama, anthropic, openai or extractive.")
+
+
+def fastembed_embedder(model: str | None = None):
+    """Local CPU embeddings via fastembed (ONNX; no GPU or server needed). ``pip install fastembed``."""
+    from fastembed import TextEmbedding  # optional dependency
+
+    encoder = TextEmbedding(model_name=model or os.getenv("SHIFTRIGHT_EMBED_MODEL", "BAAI/bge-small-en-v1.5"))
+
+    def embed(texts: list[str]) -> np.ndarray:
+        return np.array(list(encoder.embed(texts, batch_size=64)), dtype=float)
+
+    return embed
+
+
+def get_embedder(kind: str | None = None):
+    """Embedding backend for hybrid search: ``fastembed`` (default) or ``ollama``."""
+    kind = (kind or os.getenv("SHIFTRIGHT_EMBEDDER", "fastembed")).lower()
+    if kind == "fastembed":
+        return fastembed_embedder()
+    if kind == "ollama":
+        return ollama_embedder()
+    raise ValueError(f"Unknown SHIFTRIGHT_EMBEDDER '{kind}'. Use fastembed or ollama.")
 
 
 def ollama_embedder(model: str | None = None, host: str | None = None):

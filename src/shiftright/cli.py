@@ -12,7 +12,7 @@ from shiftright.answer import DISCLAIMER, answer_question
 from shiftright.chunk import chunk_pages
 from shiftright.fetch import fetch_all, load_pages
 from shiftright.index import Index
-from shiftright.llm import get_llm, ollama_embedder
+from shiftright.llm import get_embedder, get_llm
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = Path(os.getenv("SHIFTRIGHT_DATA", ROOT / "data"))
@@ -21,7 +21,7 @@ INDEX_PATH = DATA / "index.json"
 
 
 def _embedder(enabled: bool):
-    return ollama_embedder() if enabled else None
+    return get_embedder() if enabled else None
 
 
 def cmd_ingest(args) -> int:
@@ -80,7 +80,7 @@ def main(argv: list[str] | None = None) -> int:
     pi = sub.add_parser("ingest", help="download the legislation and build the search index")
     pi.add_argument("--refresh", action="store_true", help="re-download pages already on disk")
     pi.add_argument("--skip-fetch", action="store_true", help="only rebuild the index from pages on disk")
-    pi.add_argument("--embeddings", action="store_true", help="also embed passages with Ollama for hybrid search")
+    pi.add_argument("--embeddings", action="store_true", help="also embed passages for hybrid search (fastembed or Ollama)")
     pi.add_argument("--delay", type=float, default=None, help="seconds between requests (never below the site's crawl delay)")
     pi.set_defaults(func=cmd_ingest)
 

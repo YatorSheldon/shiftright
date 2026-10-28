@@ -146,7 +146,9 @@ def answer_question(question: str, index: Index, llm: LLM, k: int = 5, min_score
     if not is_work_question(question):
         return Answer(question, NOT_COVERED_MESSAGE, covered=False, model=llm.name)
     hits = index.search(question, k=k)
-    if not hits or hits[0].score < min_score:
+    # Hybrid results can rank a passage first on meaning alone (keyword score 0),
+    # so check the strongest keyword match among the retrieved passages.
+    if not hits or max(h.score for h in hits) < min_score:
         return Answer(question, NOT_COVERED_MESSAGE, covered=False, model=llm.name, retrieved=hits)
 
     raw = llm.generate(SYSTEM_PROMPT, build_prompt(question, hits)).strip()
