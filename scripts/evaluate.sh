@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Build the index from the live guidance pages and run the evaluation.
-# Run this on your own machine: the guidance site does not respond to cloud CI servers.
-# Writes metrics only (no page text) to reports/eval.json, which is safe to commit.
+# Download the legislation, build the hybrid index, and run both evaluation sets.
+# Writes metrics and miss lists (no legislation text) to reports/.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export PYTHONPATH=src
-python -m shiftright.cli ingest "$@"
-python -m shiftright.cli eval
+python -m shiftright.cli ingest --embeddings "$@"
+python -m shiftright.cli eval --embeddings --out reports/dev_hybrid.json
+python -m shiftright.cli eval --embeddings --questions eval/holdout.jsonl --out reports/holdout_hybrid.json

@@ -44,9 +44,12 @@ def cmd_ingest(args) -> int:
     return 0
 
 
-def load_index(embeddings: bool = False) -> Index:
+def load_index(embeddings: bool | None = None) -> Index:
+    """Load the index. ``embeddings=None`` turns hybrid search on if the index was built with it."""
     if not INDEX_PATH.exists():
         raise SystemExit("No index yet. Run: python -m shiftright.cli ingest")
+    if embeddings is None:
+        embeddings = INDEX_PATH.with_suffix(".npy").exists()
     return Index.load(INDEX_PATH, embed=_embedder(embeddings))
 
 
@@ -87,7 +90,7 @@ def main(argv: list[str] | None = None) -> int:
     pa = sub.add_parser("ask", help="ask a question")
     pa.add_argument("question", nargs="+")
     pa.add_argument("--llm", help="ollama | anthropic | openai | extractive")
-    pa.add_argument("--embeddings", action="store_true")
+    pa.add_argument("--embeddings", action="store_true", default=None, help="force hybrid search (default: on if the index has embeddings)")
     pa.set_defaults(func=cmd_ask)
 
     pe = sub.add_parser("eval", help="run the retrieval and refusal evaluation")
