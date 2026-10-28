@@ -88,8 +88,13 @@ def chunk_page(page: Page, target_words: int = TARGET_WORDS, overlap_words: int 
     return chunks
 
 
-def chunk_pages(pages: list[Page]) -> list[Chunk]:
+def chunk_pages(pages: list[Page], include_schedules: bool = False) -> list[Chunk]:
+    """Chunk every title. Schedule clauses are left out by default: in these titles they are
+    application, saving and transitional rules about past amendments, which crowd out the
+    rules people actually ask about."""
     out: list[Chunk] = []
     for page in pages:
+        if not include_schedules:
+            page = Page(page.url, page.title, page.cite, [s for s in page.sections if not s.number.startswith("Sch ")], page.fetched_at)
         out.extend(chunk_page(page))
     return out

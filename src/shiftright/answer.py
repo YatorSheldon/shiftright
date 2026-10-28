@@ -29,8 +29,74 @@ NOT_COVERED_MESSAGE = (
 )
 DISCLAIMER = "General information only, not legal advice. Your award or agreement may give you more."
 
-# Minimum BM25 score of the best passage before we even ask the model.
+# Minimum keyword score of the best passage before we even ask the model.
 MIN_SCORE = 2.0
+
+# A question must mention something about work before we search the law for it.
+# Keyword scores alone can't tell "renew my passport" (which shares words like "renew"
+# with the Act) from a real workplace question, so this cheap check runs first.
+WORK_ROOTS = (
+    "employ",
+    "work",
+    "job",
+    "boss",
+    "pay",
+    "paid",
+    "wage",
+    "salar",
+    "leave",
+    "holiday",
+    "shift",
+    "roster",
+    "casual",
+    "permanent",
+    "part-time",
+    "full-time",
+    "award",
+    "agreement",
+    "contract",
+    "dismiss",
+    "sack",
+    "fire",
+    "redundan",
+    "notice",
+    "resign",
+    "terminat",
+    "hour",
+    "overtime",
+    "super",
+    "union",
+    "bull",
+    "harass",
+    "discriminat",
+    "slip",
+    "sick",
+    "carer",
+    "parental",
+    "maternity",
+    "paternity",
+    "jury",
+    "intern",
+    "probation",
+    "deduct",
+    "uniform",
+    "disconnect",
+    "flexib",
+    "colleague",
+    "manager",
+    "unfair",
+    "ombudsman",
+    "standards",
+    "fair work",
+    "stand down",
+    "staff",
+    "trial",
+)
+
+
+def is_work_question(question: str) -> bool:
+    q = question.lower()
+    return any(root in q for root in WORK_ROOTS)
 
 
 @dataclass
@@ -77,6 +143,8 @@ def _cited_numbers(text: str) -> list[int]:
 
 def answer_question(question: str, index: Index, llm: LLM, k: int = 5, min_score: float = MIN_SCORE) -> Answer:
     question = question.strip()
+    if not is_work_question(question):
+        return Answer(question, NOT_COVERED_MESSAGE, covered=False, model=llm.name)
     hits = index.search(question, k=k)
     if not hits or hits[0].score < min_score:
         return Answer(question, NOT_COVERED_MESSAGE, covered=False, model=llm.name, retrieved=hits)

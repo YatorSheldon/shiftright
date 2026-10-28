@@ -83,3 +83,17 @@ def test_api_ask_and_validation(index, monkeypatch):
     body = client.post("/ask", json={"question": "What happens to untaken annual leave when employment ends?"}).json()
     assert body["covered"] and body["sources"] and "not legal advice" in body["disclaimer"]
     assert client.post("/ask", json={"question": "hi"}).status_code == 422
+
+
+def test_payslip_matches_the_acts_two_word_spelling():
+    assert tokenize("my payslip") == tokenize("my pay slip")
+
+
+def test_non_work_questions_are_refused_before_search(index):
+    from shiftright.answer import is_work_question
+
+    assert not is_work_question("How do I renew my Australian passport?")
+    assert is_work_question("Can my boss make me work on Christmas Day?")
+    llm = FakeLLM("should never be called [1]")
+    assert not answer_question("What's a good pasta recipe?", index, llm, min_score=0.0).covered
+    assert llm.prompts == []

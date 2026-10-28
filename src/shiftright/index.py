@@ -87,7 +87,8 @@ STOPWORDS = {
     "am",
     "get",
 }
-# Common Australian workplace synonyms, folded together before indexing.
+# Everyday words folded into the Act's vocabulary before indexing and searching.
+# A value can expand to several tokens ("payslip" -> "pay slip", as the Act writes it).
 SYNONYMS = {
     "casuals": "casual",
     "arvo": "afternoon",
@@ -100,8 +101,12 @@ SYNONYMS = {
     "intern": "internship",
     "interns": "internship",
     "boss": "employer",
-    "payslips": "payslip",
+    "payslip": "pay slip",
+    "payslips": "pay slip",
+    "coworkers": "employees",
+    "colleagues": "employees",
 }
+HEADING_WEIGHT = 2.0  # a match in a section's heading counts double
 
 
 def _stem(tok: str) -> str:
@@ -112,8 +117,13 @@ def _stem(tok: str) -> str:
 
 
 def tokenize(text: str) -> list[str]:
-    toks = re.findall(r"[a-z0-9]+", text.lower().replace("'", ""))
-    return [_stem(SYNONYMS.get(t, t)) for t in toks if t not in STOPWORDS]
+    out = []
+    for t in re.findall(r"[a-z0-9]+", text.lower().replace("'", "")):
+        if t in STOPWORDS:
+            continue
+        for part in SYNONYMS.get(t, t).split():
+            out.append(_stem(part))
+    return out
 
 
 @dataclass
@@ -152,6 +162,8 @@ class Index:
     def __init__(self, chunks: list[Chunk], embed: Callable[[list[str]], np.ndarray] | None = None, embeddings: np.ndarray | None = None):
         self.chunks = chunks
         self.bm25 = BM25([tokenize(c.search_text) for c in chunks])
+        # Field weighting: a second index over just the heading and its Part/Division context.
+        self.bm25_heading = BM25([tokenize(f"{c.heading} {c.context}") for c in chunks])
         self.embed = embed
         self.embeddings = embeddings
         if embed is not None and embeddings is None and chunks:
@@ -161,7 +173,7 @@ class Index:
         if not self.chunks:
             return []
         q_toks = tokenize(query)
-        bm = self.bm25.scores(q_toks)
+        bm = self.bm25.scores(q_toks) + HEADING_WEIGHT * self.bm25_heading.scores(q_toks)
         bm_order = np.argsort(-bm)
         if self.embeddings is None or self.embed is None:
             return [Hit(self.chunks[i], float(bm[i]), r) for r, i in enumerate(bm_order[:k]) if bm[i] > 0]
