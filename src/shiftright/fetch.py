@@ -22,6 +22,7 @@ from shiftright.sources import BASE_URL, URLS
 
 USER_AGENT = f"ShiftRight/{__version__} (student portfolio project; non-commercial; +https://github.com/YatorSheldon/shiftright)"
 DEFAULT_DELAY_S = 1.5
+MAX_CONSECUTIVE_FAILURES = 5
 SKIP_HEADINGS = {"on this page:", "on this page", "related information", "tools and resources"}
 
 
@@ -103,14 +104,22 @@ def fetch_all(out_dir: Path, urls: list[str] = URLS, delay_s: float = DEFAULT_DE
     out_dir.mkdir(parents=True, exist_ok=True)
     session = requests.Session()
     session.headers["User-Agent"] = USER_AGENT
-    robots = urllib.robotparser.RobotFileParser(BASE_URL + "/robots.txt")
+    robots = urllib.robotparser.RobotFileParser()
     try:
-        robots.read()
-    except Exception as exc:  # noqa: BLE001
-        print(f"Couldn't read robots.txt ({exc}); continuing with the built-in page list.")
+        # RobotFileParser.read() has no timeout, so fetch robots.txt ourselves.
+        r = session.get(BASE_URL + "/robots.txt", timeout=15)
+        r.raise_for_status()
+        robots.parse(r.text.splitlines())
+    except requests.RequestException as exc:
+        print(f"Couldn't read robots.txt ({exc}); continuing with the built-in page list.", flush=True)
+        robots.parse([])
 
     saved: list[Path] = []
+    consecutive_failures = 0
     for i, url in enumerate(urls, 1):
+        if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+            print(f"Stopping: {consecutive_failures} requests failed in a row. The site may be unreachable from here.", flush=True)
+            break
         slug = re.sub(r"[^a-z0-9]+", "-", url.removeprefix(BASE_URL).lower()).strip("-")
         path = out_dir / f"{slug}.json"
         if path.exists() and not refresh:
@@ -123,13 +132,15 @@ def fetch_all(out_dir: Path, urls: list[str] = URLS, delay_s: float = DEFAULT_DE
             resp = session.get(url, timeout=20)
             resp.raise_for_status()
         except requests.RequestException as exc:
-            print(f"[{i}/{len(urls)}] failed: {url} ({exc})")
+            consecutive_failures += 1
+            print(f"[{i}/{len(urls)}] failed: {url} ({exc})", flush=True)
             continue
+        consecutive_failures = 0
         page = parse_page(resp.text, url)
         page.fetched_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
         path.write_text(json.dumps(asdict(page), ensure_ascii=False, indent=1))
         saved.append(path)
-        print(f"[{i}/{len(urls)}] {page.title}: {len(page.sections)} sections")
+        print(f"[{i}/{len(urls)}] {page.title}: {len(page.sections)} sections", flush=True)
         time.sleep(delay_s)
     return saved
 
