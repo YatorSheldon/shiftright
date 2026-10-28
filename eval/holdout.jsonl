@@ -1,0 +1,19 @@
+{"question": "How much notice should I get if I've worked somewhere for three years?", "sections": ["FWA:117"]}
+{"question": "Can I cash out some of my annual leave?", "sections": ["FWA:92", "FWA:93", "FWA:94"]}
+{"question": "Can my employer make me take annual leave when I don't want to?", "sections": ["FWA:88", "FWA:93"]}
+{"question": "Do I need a medical certificate when I take sick leave?", "sections": ["FWA:107"]}
+{"question": "I'm casual. Can I take time off to look after my sick mum?", "sections": ["FWA:102", "FWA:103"]}
+{"question": "Can I ask to extend my parental leave?", "sections": ["FWA:76"]}
+{"question": "Is my employer allowed to refuse my flexible work request?", "sections": ["FWA:65", "FWA:65A"]}
+{"question": "Can I be fired for being off sick?", "sections": ["FWA:352"]}
+{"question": "Can my employer stop me from joining a union?", "sections": ["FWA:346", "FWA:347"]}
+{"question": "How long do I have to lodge an unfair dismissal claim?", "sections": ["FWA:394"]}
+{"question": "What is sham contracting?", "sections": ["FWA:357"]}
+{"question": "Can my employer make me pay for my own uniform?", "sections": ["FWA:325"]}
+{"question": "When does an employer not have to pay redundancy pay?", "sections": ["FWA:121"]}
+{"question": "Are there limits on how long a fixed-term contract can last?", "sections": ["FWA:333E", "FWA:333F"]}
+{"question": "Is long service leave covered by the Fair Work Act?", "sections": ["FWA:113"]}
+{"question": "How do I lodge my tax return?", "expect": "not_covered"}
+{"question": "Where can I buy cheap second-hand textbooks?", "expect": "not_covered"}
+{"question": "How do I write a good cover letter?", "expect": "not_covered"}
+{"question": "What's the best phone plan for students?", "expect": "not_covered"}
