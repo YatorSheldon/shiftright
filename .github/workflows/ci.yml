@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 20 * * 0" # weekly, Monday 7am Melbourne: catches guidance-page changes
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - name: Lint
+        run: ruff check . && ruff format --check .
+      - name: Unit tests
+        run: pytest -q
+
+  evaluate:
+    # Builds the index from the live guidance pages and measures retrieval quality.
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Download guidance pages and build index
+        run: PYTHONPATH=src python -m shiftright.cli ingest
+      - name: Evaluate retrieval and refusals
+        run: PYTHONPATH=src python -m shiftright.cli eval
+      - name: Write job summary
+        run: |
+          python - <<'EOF' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          r = json.load(open("reports/eval.json"))
+          print("## Evaluation\n")
+          print("| Metric | Value |\n| --- | --- |")
+          for k, v in r.items():
+              if k != "misses":
+                  print(f"| {k} | {v} |")
+          if r["misses"]:
+              print("\n### Retrieval misses\n")
+              for m in r["misses"]:
+                  print(f"- {m['question']} (expected {', '.join(m['expected'])}; got {', '.join(m['got'])})")
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: reports/eval.json

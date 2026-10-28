@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.gradio/
+# Downloaded guidance pages and the index stay on your machine
+data/

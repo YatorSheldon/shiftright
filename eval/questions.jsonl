@@ -1,0 +1,40 @@
+{"question": "Do casual employees get paid more per hour than permanent staff?", "pages": ["/starting-employment/types-of-employees"]}
+{"question": "What is casual loading?", "pages": ["/starting-employment/types-of-employees", "/pay-and-wages/allowances-penalty-rates-and-other-penalties"]}
+{"question": "Is an unpaid trial shift legal?", "pages": ["/starting-employment/unpaid-work"]}
+{"question": "Can I do an unpaid internship as part of my university course?", "pages": ["/starting-employment/unpaid-work"]}
+{"question": "What is the national minimum wage?", "pages": ["/pay-and-wages/minimum-wages"]}
+{"question": "How do I find out the minimum pay rate for my job?", "pages": ["/pay-and-wages/minimum-wages", "/pay-and-wages/minimum-wages/pay-guides", "/employment-conditions/awards"]}
+{"question": "Can I be paid less because I'm under 21?", "pages": ["/pay-and-wages/minimum-wages/junior-pay-rates"]}
+{"question": "Do I get penalty rates for working on Sunday?", "pages": ["/pay-and-wages/allowances-penalty-rates-and-other-penalties"]}
+{"question": "Does my employer have to give me a payslip?", "pages": ["/pay-and-wages/paying-wages"]}
+{"question": "Can my boss take money out of my pay for a broken glass?", "pages": ["/pay-and-wages/deductions-and-related-issues"]}
+{"question": "Am I allowed to tell my coworkers how much I get paid?", "pages": ["/pay-and-wages/pay-secrecy"]}
+{"question": "Does my employer have to pay superannuation for me?", "pages": ["/pay-and-wages/tax-and-superannuation"]}
+{"question": "How much annual leave do full-time employees get each year?", "pages": ["/leave/annual-leave"]}
+{"question": "What happens to my unused annual leave when I resign?", "pages": ["/leave/annual-leave", "/ending-employment/final-pay"]}
+{"question": "How many days of paid sick leave do I get?", "pages": ["/leave/sick-and-carers-leave"]}
+{"question": "Do casual workers get paid sick leave?", "pages": ["/leave/sick-and-carers-leave", "/starting-employment/types-of-employees"]}
+{"question": "Can I take time off when a family member dies?", "pages": ["/leave/compassionate-and-bereavement-leave"]}
+{"question": "Do I get paid if I work on a public holiday?", "pages": ["/employment-conditions/public-holidays"]}
+{"question": "Am I entitled to breaks during a long shift?", "pages": ["/employment-conditions/hours-of-work-breaks-and-rosters"]}
+{"question": "Can my boss change my roster at the last minute?", "pages": ["/employment-conditions/hours-of-work-breaks-and-rosters"]}
+{"question": "Do I have to answer work calls and emails after hours?", "pages": ["/employment-conditions/right-to-disconnect"]}
+{"question": "What are the National Employment Standards?", "pages": ["/employment-conditions/national-employment-standards"]}
+{"question": "What is an award and how do I know which one covers me?", "pages": ["/employment-conditions/awards"]}
+{"question": "What should be included in my employment contract?", "pages": ["/employment-conditions/employment-contracts"]}
+{"question": "What is a probation period?", "pages": ["/starting-employment/probation"]}
+{"question": "How much notice do I need to give when I resign?", "pages": ["/ending-employment/resignation"]}
+{"question": "What should I receive in my final pay?", "pages": ["/ending-employment/final-pay"]}
+{"question": "I think I was unfairly dismissed. What can I do?", "pages": ["/ending-employment/dismissal", "/ending-employment/help-with-termination"]}
+{"question": "Am I entitled to redundancy pay?", "pages": ["/ending-employment/redundancy"]}
+{"question": "What can I do if I'm being bullied at work?", "pages": ["/employment-conditions/bullying-in-the-workplace", "/find-help-for/young-workers-and-students/resolving-issues-and-getting-help"]}
+{"question": "What is the minimum age to start working?", "pages": ["/find-help-for/young-workers-and-students/minimum-working-age"]}
+{"question": "Do visa holders have the same workplace rights as Australian citizens?", "pages": ["/find-help-for/visa-holders-migrants"]}
+{"question": "Am I an employee or an independent contractor?", "pages": ["/find-help-for/independent-contractors", "/starting-employment/types-of-employees"]}
+{"question": "How do I get help to recover unpaid wages?", "pages": ["/find-help-for/young-workers-and-students/resolving-issues-and-getting-help", "/pay-and-wages/paying-wages"]}
+{"question": "How do I renew my Australian passport?", "expect": "not_covered"}
+{"question": "What's a good recipe for spaghetti bolognese?", "expect": "not_covered"}
+{"question": "How do I get a learner driver licence in Victoria?", "expect": "not_covered"}
+{"question": "Which programming language should I learn first?", "expect": "not_covered"}
+{"question": "What's the weather in Melbourne tomorrow?", "expect": "not_covered"}
+{"question": "How do I apply for a credit card?", "expect": "not_covered"}
