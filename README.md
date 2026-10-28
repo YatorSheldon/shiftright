@@ -47,15 +47,18 @@ question ──► top-5 passages ──► score too low? ──► "not covere
 
 [`eval/questions.jsonl`](eval/questions.jsonl) holds 34 realistic student questions, each labelled with
 the page(s) that should answer it, plus 6 out-of-scope questions (passports, recipes, the weather)
-that the assistant should decline. CI downloads the live pages every week, rebuilds the index and
-reports:
+that the assistant should decline. [`scripts/evaluate.sh`](scripts/evaluate.sh) downloads the live
+pages, rebuilds the index and reports:
 
 - **page hit@k**: share of questions whose correct page is in the top *k* results
 - **MRR**: how high the first correct page ranks
 - **refusal accuracy**: share of out-of-scope questions declined
 - **false refusal rate**: share of answerable questions wrongly declined
 
-Results from the latest run are in the CI job summary (Actions tab → latest run → *Evaluation*).
+The evaluation runs locally rather than in CI: the guidance site doesn't respond to requests from
+cloud CI servers (found when the first CI evaluation timed out on every page). CI runs lint and the
+unit tests on every push; the latest local metrics, numbers only, are in
+[`reports/eval.json`](reports/eval.json).
 
 ## Run it
 
@@ -95,6 +98,7 @@ src/shiftright/
   answer.py     prompt, refusal threshold, citation checking
   evaluate.py   hit@k, MRR, refusal metrics
   cli.py        ingest | ask | eval
+scripts/evaluate.sh   download pages, rebuild the index, run the evaluation
   api.py        FastAPI service
 app.py          Gradio chat UI
 tests/          parser, chunking, retrieval, guardrail and API tests (invented fixture text)
