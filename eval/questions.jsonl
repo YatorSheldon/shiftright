@@ -1,37 +1,37 @@
-{"question": "Do casual employees get paid more per hour than permanent staff?", "pages": ["/starting-employment/types-of-employees"]}
-{"question": "What is casual loading?", "pages": ["/starting-employment/types-of-employees", "/pay-and-wages/allowances-penalty-rates-and-other-penalties"]}
-{"question": "Is an unpaid trial shift legal?", "pages": ["/starting-employment/unpaid-work"]}
-{"question": "Can I do an unpaid internship as part of my university course?", "pages": ["/starting-employment/unpaid-work"]}
-{"question": "What is the national minimum wage?", "pages": ["/pay-and-wages/minimum-wages"]}
-{"question": "How do I find out the minimum pay rate for my job?", "pages": ["/pay-and-wages/minimum-wages", "/pay-and-wages/minimum-wages/pay-guides", "/employment-conditions/awards"]}
-{"question": "Can I be paid less because I'm under 21?", "pages": ["/pay-and-wages/minimum-wages/junior-pay-rates"]}
-{"question": "Do I get penalty rates for working on Sunday?", "pages": ["/pay-and-wages/allowances-penalty-rates-and-other-penalties"]}
-{"question": "Does my employer have to give me a payslip?", "pages": ["/pay-and-wages/paying-wages"]}
-{"question": "Can my boss take money out of my pay for a broken glass?", "pages": ["/pay-and-wages/deductions-and-related-issues"]}
-{"question": "Am I allowed to tell my coworkers how much I get paid?", "pages": ["/pay-and-wages/pay-secrecy"]}
-{"question": "Does my employer have to pay superannuation for me?", "pages": ["/pay-and-wages/tax-and-superannuation"]}
-{"question": "How much annual leave do full-time employees get each year?", "pages": ["/leave/annual-leave"]}
-{"question": "What happens to my unused annual leave when I resign?", "pages": ["/leave/annual-leave", "/ending-employment/final-pay"]}
-{"question": "How many days of paid sick leave do I get?", "pages": ["/leave/sick-and-carers-leave"]}
-{"question": "Do casual workers get paid sick leave?", "pages": ["/leave/sick-and-carers-leave", "/starting-employment/types-of-employees"]}
-{"question": "Can I take time off when a family member dies?", "pages": ["/leave/compassionate-and-bereavement-leave"]}
-{"question": "Do I get paid if I work on a public holiday?", "pages": ["/employment-conditions/public-holidays"]}
-{"question": "Am I entitled to breaks during a long shift?", "pages": ["/employment-conditions/hours-of-work-breaks-and-rosters"]}
-{"question": "Can my boss change my roster at the last minute?", "pages": ["/employment-conditions/hours-of-work-breaks-and-rosters"]}
-{"question": "Do I have to answer work calls and emails after hours?", "pages": ["/employment-conditions/right-to-disconnect"]}
-{"question": "What are the National Employment Standards?", "pages": ["/employment-conditions/national-employment-standards"]}
-{"question": "What is an award and how do I know which one covers me?", "pages": ["/employment-conditions/awards"]}
-{"question": "What should be included in my employment contract?", "pages": ["/employment-conditions/employment-contracts"]}
-{"question": "What is a probation period?", "pages": ["/starting-employment/probation"]}
-{"question": "How much notice do I need to give when I resign?", "pages": ["/ending-employment/resignation"]}
-{"question": "What should I receive in my final pay?", "pages": ["/ending-employment/final-pay"]}
-{"question": "I think I was unfairly dismissed. What can I do?", "pages": ["/ending-employment/dismissal", "/ending-employment/help-with-termination"]}
-{"question": "Am I entitled to redundancy pay?", "pages": ["/ending-employment/redundancy"]}
-{"question": "What can I do if I'm being bullied at work?", "pages": ["/employment-conditions/bullying-in-the-workplace", "/find-help-for/young-workers-and-students/resolving-issues-and-getting-help"]}
-{"question": "What is the minimum age to start working?", "pages": ["/find-help-for/young-workers-and-students/minimum-working-age"]}
-{"question": "Do visa holders have the same workplace rights as Australian citizens?", "pages": ["/find-help-for/visa-holders-migrants"]}
-{"question": "Am I an employee or an independent contractor?", "pages": ["/find-help-for/independent-contractors", "/starting-employment/types-of-employees"]}
-{"question": "How do I get help to recover unpaid wages?", "pages": ["/find-help-for/young-workers-and-students/resolving-issues-and-getting-help", "/pay-and-wages/paying-wages"]}
+{"question": "How much annual leave do full-time employees get each year?", "sections": ["FWA:87"]}
+{"question": "What happens to my unused annual leave when my job ends?", "sections": ["FWA:90"]}
+{"question": "How many days of paid sick leave am I entitled to?", "sections": ["FWA:96"]}
+{"question": "Do casual employees get paid sick leave?", "sections": ["FWA:95", "FWA:102"]}
+{"question": "Can I take leave when a family member dies?", "sections": ["FWA:104"]}
+{"question": "Is there paid leave for family and domestic violence?", "sections": ["FWA:106A"]}
+{"question": "Can my boss make me work on a public holiday like Christmas Day?", "sections": ["FWA:114"]}
+{"question": "Do I get paid if I take a public holiday off?", "sections": ["FWA:116"]}
+{"question": "What is the maximum number of hours I can be asked to work each week?", "sections": ["FWA:62"]}
+{"question": "Can I ask my employer for flexible working hours because I'm studying or caring for someone?", "sections": ["FWA:65"]}
+{"question": "How much unpaid parental leave can I take?", "sections": ["FWA:70"]}
+{"question": "How much notice does my employer have to give me before ending my job?", "sections": ["FWA:117"]}
+{"question": "Am I entitled to redundancy pay?", "sections": ["FWA:119"]}
+{"question": "What makes someone a casual employee?", "sections": ["FWA:15A"]}
+{"question": "Can a casual employee become permanent?", "sections": ["FWA:66AAB", "FWA:66AAC", "FWA:66B", "FWA:66F"]}
+{"question": "What are the National Employment Standards?", "sections": ["FWA:61"]}
+{"question": "Does my employer have to give me the Fair Work Information Statement when I start?", "sections": ["FWA:125"]}
+{"question": "Should casual employees get a Casual Employment Information Statement?", "sections": ["FWA:125A"]}
+{"question": "Can my employer pay me in vouchers instead of money?", "sections": ["FWA:323"]}
+{"question": "Can my boss take money out of my pay?", "sections": ["FWA:324", "FWA:326"]}
+{"question": "Am I allowed to tell my coworkers how much I get paid?", "sections": ["FWA:333B", "FWA:333C"]}
+{"question": "Do I have to answer work calls and emails after hours?", "sections": ["FWA:333M"]}
+{"question": "Does my employer have to give me a payslip?", "sections": ["FWA:536"]}
+{"question": "What information must be on a payslip?", "sections": ["FWR:3.46", "FWA:536"]}
+{"question": "Does my employer have to keep records of my hours and pay?", "sections": ["FWA:535"]}
+{"question": "What counts as an unfair dismissal?", "sections": ["FWA:385"]}
+{"question": "Can I claim unfair dismissal if I was let go during my first few months?", "sections": ["FWA:383", "FWA:382"]}
+{"question": "Can my employer punish me for making a complaint about my pay?", "sections": ["FWA:340", "FWA:341", "FWA:342"]}
+{"question": "Is it against the law for my employer to discriminate against me because of my race or age?", "sections": ["FWA:351"]}
+{"question": "Is sexual harassment at work prohibited?", "sections": ["FWA:527D"]}
+{"question": "What does it legally mean to be bullied at work?", "sections": ["FWA:789FD"]}
+{"question": "How is the national minimum wage decided?", "sections": ["FWA:285", "FWA:284"]}
+{"question": "Can my employer stand me down without pay?", "sections": ["FWA:524"]}
+{"question": "Do I get leave to do jury duty?", "sections": ["FWA:111", "FWA:108"]}
 {"question": "How do I renew my Australian passport?", "expect": "not_covered"}
 {"question": "What's a good recipe for spaghetti bolognese?", "expect": "not_covered"}
 {"question": "How do I get a learner driver licence in Victoria?", "expect": "not_covered"}

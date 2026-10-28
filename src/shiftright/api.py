@@ -8,14 +8,14 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from shiftright import __version__
-from shiftright.answer import answer_question
+from shiftright.answer import MIN_SCORE, answer_question
 from shiftright.llm import get_llm
 
 app = FastAPI(title="ShiftRight API", version=__version__, description="Answers Australian workplace-rights questions with cited sources.")
 
 
 class Question(BaseModel):
-    question: str = Field(..., min_length=3, max_length=500, examples=["Do casual workers get paid more per hour?"])
+    question: str = Field(..., min_length=3, max_length=500, examples=["Do casual employees get paid sick leave?"])
 
 
 @lru_cache(maxsize=1)
@@ -46,6 +46,6 @@ def ask(q: Question) -> dict:
     except SystemExit as exc:
         raise HTTPException(status_code=503, detail="Index not built. Run the ingest command first.") from exc
     try:
-        return answer_question(q.question, idx, _llm()).to_dict()
+        return answer_question(q.question, idx, _llm(), min_score=MIN_SCORE).to_dict()
     except Exception as exc:  # model server down, bad key, etc.
         raise HTTPException(status_code=502, detail=f"The language model didn't respond: {exc}") from exc

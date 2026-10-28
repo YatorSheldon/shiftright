@@ -31,14 +31,16 @@ def cmd_ingest(args) -> int:
     pages = load_pages(RAW_DIR)
     if not pages:
         print(
-            "No pages on disk. If downloads failed, check your internet connection; the guidance site may not respond to cloud servers.",
+            "Nothing downloaded yet. If downloads failed, check your internet connection and try again.",
             file=sys.stderr,
         )
         return 1
     chunks = chunk_pages(pages)
     index = Index(chunks, embed=_embedder(args.embeddings))
     index.save(INDEX_PATH)
-    print(f"Indexed {len(chunks)} passages from {len(pages)} pages{' with embeddings' if args.embeddings else ''} -> {INDEX_PATH}")
+    print(
+        f"Indexed {len(chunks)} passages from {sum(len(p.sections) for p in pages)} sections in {len(pages)} titles{' with embeddings' if args.embeddings else ''} -> {INDEX_PATH}"
+    )
     return 0
 
 
@@ -75,11 +77,11 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="shiftright", description="Australian workplace-rights assistant")
     sub = p.add_subparsers(dest="cmd", required=True)
 
-    pi = sub.add_parser("ingest", help="download guidance pages and build the search index")
+    pi = sub.add_parser("ingest", help="download the legislation and build the search index")
     pi.add_argument("--refresh", action="store_true", help="re-download pages already on disk")
     pi.add_argument("--skip-fetch", action="store_true", help="only rebuild the index from pages on disk")
     pi.add_argument("--embeddings", action="store_true", help="also embed passages with Ollama for hybrid search")
-    pi.add_argument("--delay", type=float, default=1.5, help="seconds between requests")
+    pi.add_argument("--delay", type=float, default=None, help="seconds between requests (never below the site's crawl delay)")
     pi.set_defaults(func=cmd_ingest)
 
     pa = sub.add_parser("ask", help="ask a question")

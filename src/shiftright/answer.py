@@ -7,23 +7,27 @@ from dataclasses import dataclass, field
 
 from shiftright.index import Hit, Index
 from shiftright.llm import LLM
-from shiftright.sources import ATTRIBUTION
+from shiftright.sources import LICENCE_NAME, REGISTER_URL
 
-SYSTEM_PROMPT = """You answer questions about Australian workplace rights for students and young workers.
+SYSTEM_PROMPT = """You explain Australian workplace law to students and young workers in plain English.
+
+The numbered sources are sections of the Fair Work Act 2009 and the Fair Work Regulations 2009.
 
 Rules:
 - Use ONLY the numbered sources provided. Do not use outside knowledge.
 - After every claim, cite the source number in square brackets, like [2].
+- Translate legal wording into everyday language; mention the section number once, e.g. "(s 87)".
 - If the sources do not answer the question, reply exactly: NOT_COVERED
-- Do not state specific dollar amounts or percentages unless a source states them.
-- Be concise: at most 6 sentences, plain language, no legal jargon.
+- Do not state dollar amounts, rates or percentages unless a source states them.
+- Pay rates and many conditions come from awards and agreements, which you don't have. If that matters, say so.
+- Be concise: at most 6 sentences.
 - You are not a lawyer and this is general information, not legal advice."""
 
 NOT_COVERED_MESSAGE = (
-    "I couldn't find this in the guidance I have. Try rephrasing, or contact the Fair Work Ombudsman directly "
-    "(fairwork.gov.au) for help with your situation."
+    "I couldn't find this in the Fair Work Act or Regulations. It may depend on your award or agreement. "
+    "The Fair Work Ombudsman (fairwork.gov.au, 13 13 94) can help with your situation."
 )
-DISCLAIMER = "General information only, not legal advice. Check the linked pages for your award or agreement."
+DISCLAIMER = "General information only, not legal advice. Your award or agreement may give you more."
 
 # Minimum BM25 score of the best passage before we even ask the model.
 MIN_SCORE = 2.0
@@ -35,6 +39,7 @@ class Source:
     title: str
     heading: str
     url: str
+    section: str = ""
 
 
 @dataclass
@@ -54,7 +59,7 @@ class Answer:
             "sources": [s.__dict__ for s in self.sources],
             "model": self.model,
             "disclaimer": DISCLAIMER,
-            "attribution": ATTRIBUTION,
+            "source": f"Federal Register of Legislation ({REGISTER_URL}), {LICENCE_NAME}",
         }
 
 
@@ -62,7 +67,7 @@ def build_prompt(question: str, hits: list[Hit]) -> str:
     parts = []
     for n, h in enumerate(hits, 1):
         c = h.chunk
-        parts.append(f"[{n}] {c.page_title} > {c.heading} ({c.url})\n{c.text}")
+        parts.append(f"[{n}] {c.page_title} {c.heading} ({c.context})\n{c.text}")
     return "SOURCES:\n" + "\n".join(parts) + f"\nQUESTION: {question}"
 
 
@@ -88,7 +93,13 @@ def answer_question(question: str, index: Index, llm: LLM, k: int = 5, min_score
         return Answer(question, NOT_COVERED_MESSAGE, covered=False, model=llm.name, retrieved=hits)
 
     sources = [
-        Source(number=n, title=hits[n - 1].chunk.page_title, heading=hits[n - 1].chunk.heading, url=hits[n - 1].chunk.url)
+        Source(
+            number=n,
+            title=hits[n - 1].chunk.page_title,
+            heading=hits[n - 1].chunk.heading,
+            url=hits[n - 1].chunk.url,
+            section=hits[n - 1].chunk.number,
+        )
         for n in sorted(valid)
     ]
     return Answer(question, text, covered=True, sources=sources, model=llm.name, retrieved=hits)

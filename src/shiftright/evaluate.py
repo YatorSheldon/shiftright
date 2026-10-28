@@ -1,11 +1,12 @@
 """Retrieval and refusal evaluation.
 
-Each line of ``eval/questions.jsonl`` is a question with the page(s) that
-should answer it, or ``"expect": "not_covered"`` for questions outside the
-guidance. We measure:
+Each line of ``eval/questions.jsonl`` is a question with the section(s) that
+should answer it (``"FWA:87"`` = Fair Work Act 2009 s 87, ``"FWR:3.46"`` = Fair
+Work Regulations 2009 reg 3.46), or ``"expect": "not_covered"`` for questions
+the law doesn't answer. We measure:
 
-- hit@k: share of answerable questions whose expected page is in the top k
-- MRR:   mean reciprocal rank of the first expected page
+- hit@k: share of answerable questions whose expected section is in the top k
+- MRR:   mean reciprocal rank of the first expected section
 - refusal accuracy: share of out-of-scope questions the pipeline declines,
   and share of answerable ones it does NOT decline (no false refusals)
 """
@@ -18,7 +19,13 @@ from pathlib import Path
 from shiftright.answer import answer_question
 from shiftright.index import Index
 from shiftright.llm import LLM, ExtractiveLLM
-from shiftright.sources import BASE_URL
+
+PREFIXES = {"FWA": "Fair Work Act 2009", "FWR": "Fair Work Regulations 2009"}
+
+
+def section_key(ref: str) -> str:
+    prefix, number = ref.split(":", 1)
+    return f"{PREFIXES[prefix]}:{number}"
 
 
 def load_questions(path: Path) -> list[dict]:
@@ -34,17 +41,18 @@ def evaluate(index: Index, questions: list[dict], k: int = 5, llm: LLM | None = 
     misses = []
 
     for q in answerable:
-        expected = {BASE_URL + p if p.startswith("/") else p for p in q["pages"]}
-        urls = []
-        for h in index.search(q["question"], k=k):
-            if h.chunk.url not in urls:
-                urls.append(h.chunk.url)
-        rank = next((i + 1 for i, u in enumerate(urls) if u in expected), None)
+        expected = {section_key(r) for r in q["sections"]}
+        keys = []
+        for h in index.search(q["question"], k=k * 3):
+            if h.chunk.section_key not in keys:
+                keys.append(h.chunk.section_key)
+        keys = keys[:k]
+        rank = next((i + 1 for i, key in enumerate(keys) if key in expected), None)
         for cut in hits_at:
             hits_at[cut] += int(rank is not None and rank <= cut)
         rr_total += 1 / rank if rank else 0.0
         if rank is None:
-            misses.append({"question": q["question"], "expected": sorted(expected), "got": urls[:3]})
+            misses.append({"question": q["question"], "expected": sorted(expected), "got": keys[:3]})
 
     false_refusals = sum(not answer_question(q["question"], index, llm).covered for q in answerable)
     correct_refusals = sum(not answer_question(q["question"], index, llm).covered for q in out_of_scope)

@@ -88,9 +88,9 @@ class ExtractiveLLM:
         question = prompt.split("QUESTION:", 1)[-1].strip()
         q = set(tokenize(question))
         scored = []
-        for m in re.finditer(r"\[(\d+)\][^\n]*\n(.*?)(?=\n\[\d+\]|\nQUESTION:|\Z)", prompt, flags=re.DOTALL):
+        for m in re.finditer(r"^\[(\d+)\][^\n]*\n(.*?)(?=\n\[\d+\] |\nQUESTION:|\Z)", prompt, flags=re.DOTALL | re.MULTILINE):
             num, body = m.group(1), m.group(2)
-            for sent in re.split(r"(?<=[.!?])\s+", body.strip()):
+            for sent in re.split(r"(?<=[.;:])\s+", body.strip()):
                 overlap = len(q & set(tokenize(sent)))
                 if overlap and len(sent.split()) >= 6:
                     scored.append((overlap, -len(scored), sent.strip(), num))
