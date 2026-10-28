@@ -30,7 +30,10 @@ def cmd_ingest(args) -> int:
         print(f"{len(saved)} pages on disk.")
     pages = load_pages(RAW_DIR)
     if not pages:
-        print("No pages on disk. If downloads failed, check your internet connection; the guidance site may not respond to cloud servers.", file=sys.stderr)
+        print(
+            "No pages on disk. If downloads failed, check your internet connection; the guidance site may not respond to cloud servers.",
+            file=sys.stderr,
+        )
         return 1
     chunks = chunk_pages(pages)
     index = Index(chunks, embed=_embedder(args.embeddings))
