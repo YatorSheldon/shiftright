@@ -69,7 +69,7 @@ def cmd_eval(args) -> int:
     report = evaluate(load_index(args.embeddings), load_questions(Path(args.questions)), llm=llm)
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(report, indent=2))
+    out.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps({k: v for k, v in report.items() if k != "misses"}, indent=2))
     if report["misses"]:
         print(f"\n{len(report['misses'])} retrieval misses (see {out})")

@@ -194,13 +194,13 @@ class Index:
     # Persistence -----------------------------------------------------------
     def save(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps({"chunks": [asdict(c) for c in self.chunks]}, ensure_ascii=False))
+        path.write_text(json.dumps({"chunks": [asdict(c) for c in self.chunks]}, ensure_ascii=False), encoding="utf-8")
         if self.embeddings is not None:
             np.save(path.with_suffix(".npy"), self.embeddings)
 
     @classmethod
     def load(cls, path: Path, embed: Callable[[list[str]], np.ndarray] | None = None) -> Index:
-        data = json.loads(path.read_text())
+        data = json.loads(path.read_text(encoding="utf-8"))
         chunks = [Chunk(**c) for c in data["chunks"]]
         emb_path = path.with_suffix(".npy")
         embeddings = np.load(emb_path) if (embed is not None and emb_path.exists()) else None

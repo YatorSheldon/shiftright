@@ -29,7 +29,7 @@ def section_key(ref: str) -> str:
 
 
 def load_questions(path: Path) -> list[dict]:
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def evaluate(index: Index, questions: list[dict], k: int = 5, llm: LLM | None = None) -> dict:

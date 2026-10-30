@@ -97,3 +97,15 @@ def test_non_work_questions_are_refused_before_search(index):
     llm = FakeLLM("should never be called [1]")
     assert not answer_question("What's a good pasta recipe?", index, llm, min_score=0.0).covered
     assert llm.prompts == []
+
+
+def test_index_round_trips_as_utf8_on_any_platform(index, tmp_path, monkeypatch):
+    import locale
+
+    # Simulate Windows, whose default text encoding (cp1252) can't hold characters like "—".
+    monkeypatch.setattr(locale, "getpreferredencoding", lambda *a, **k: "cp1252")
+    index.chunks[0].heading = "s 10 Meaning of casual employee — test"
+    path = tmp_path / "index.json"
+    index.save(path)
+    assert "—" in path.read_bytes().decode("utf-8")
+    assert Index.load(path).chunks[0].heading.endswith("— test")
