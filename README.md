@@ -18,6 +18,11 @@ variable.
 > **Q:** How do I renew my passport?
 > **A:** *"I couldn't find this in the Fair Work Act or Regulations…"*, and the model is never called.
 
+![ShiftRight demo: a payslip question answered with a cited regulation, and an off-topic question refused](docs/demo.gif)
+
+<sub>Recorded in no-model mode, which shows the cited source text itself. With Ollama, Claude or OpenAI connected,
+the same sources are rewritten into a short plain-English answer.</sub>
+
 ## Why
 
 Students and young workers are some of the most likely people to be underpaid or to lose
